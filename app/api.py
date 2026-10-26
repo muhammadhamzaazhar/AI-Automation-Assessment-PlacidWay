@@ -97,7 +97,9 @@ def build_services(settings: Settings) -> AppServices:
     def use_new_knowledge_base(new_kb: KnowledgeBase) -> None:
         chat.kb = new_kb
 
-    return AppServices(chat, storage, RefreshManager(settings, embedder, use_new_knowledge_base))
+    # On Vercel the project files are read-only, so a live refresh can't save the new index.
+    refresher = None if settings.vercel else RefreshManager(settings, embedder, use_new_knowledge_base)
+    return AppServices(chat, storage, refresher)
 
 
 async def _scheduled_refresh(refresher: RefreshManager, hours: float) -> None:
@@ -131,7 +133,9 @@ def create_app(settings: Settings | None = None, services: AppServices | None = 
         return request.app.state.services
 
     def rate_limited(request: Request) -> None:
-        client = request.client.host if request.client else "unknown"
+        # Behind a proxy (Vercel, Hugging Face) the visitor's IP is the first X-Forwarded-For entry.
+        forwarded = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+        client = forwarded or (request.client.host if request.client else "unknown")
         if not limiter.allow(client):
             raise HTTPException(429, "Too many requests. Please wait a minute and try again.")
 
@@ -172,7 +176,10 @@ def create_app(settings: Settings | None = None, services: AppServices | None = 
 
     @app.post("/admin/refresh", status_code=202, dependencies=[Depends(require_admin)])
     def start_refresh(services: AppServices = Depends(get_services)) -> dict:
-        if services.refresher is None or not services.refresher.start():
+        if services.refresher is None:
+            raise HTTPException(501, "Live refresh isn't available on this host. Run "
+                                     "`python -m scripts.ingest`, commit data/ and redeploy.")
+        if not services.refresher.start():
             raise HTTPException(409, "A refresh is already running.")
         return {"started": True, "check_status_at": "/admin/refresh"}
 

@@ -56,13 +56,15 @@ Also included: answers in the visitor's language, a medical disclaimer (shown on
 
 ## Refresh content
 
-Run `python -m scripts.ingest`, or call the live site:
+Run `python -m scripts.ingest`, then commit and push the updated `data/` folder (the deployed site
+picks it up on redeploy). On a server with a writable disk (Docker, Hugging Face) you can instead
+call the live site:
 
 ```bash
 curl -X POST https://<your-url>/admin/refresh -H "X-Admin-Token: <ADMIN_TOKEN>"
 ```
 
-Set `REFRESH_INTERVAL_HOURS` in `.env` to refresh automatically. Other admin endpoints:
+There, `REFRESH_INTERVAL_HOURS` refreshes automatically. Other admin endpoints:
 `GET /admin/unanswered` (questions the bot couldn't answer) and `GET /admin/leads`.
 
 ## Tools and models
@@ -92,5 +94,8 @@ tests/                unit tests
 
 ## Deploy
 
-The app runs as one Docker container (`Dockerfile`). On Hugging Face Spaces: create a Docker Space,
-add `OPENAI_API_KEY` and `ADMIN_TOKEN` as secrets, and push this repository.
+- **Vercel:** import the repo (preset: FastAPI, default settings) and add `OPENAI_API_KEY` and
+  `ADMIN_TOKEN` as environment variables. Vercel's disk is read-only, so to refresh content run
+  `python -m scripts.ingest` locally and push; leads and logs are kept in `/tmp` (temporary).
+- **Docker / Hugging Face Spaces:** create a Docker Space, add the same two secrets and push this
+  repository. Here `/admin/refresh` updates the content live.

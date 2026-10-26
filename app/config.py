@@ -50,6 +50,9 @@ class Settings(BaseSettings):
     rate_limit_per_minute: int = 20
     refresh_interval_hours: float = 0  # 0 disables the scheduled refresh
 
+    # Vercel sets VERCEL=1. Its filesystem is read-only except /tmp.
+    vercel: bool = False
+
     @property
     def raw_dir(self) -> Path:
         return self.data_dir / "raw"
@@ -64,7 +67,7 @@ class Settings(BaseSettings):
 
     @property
     def db_path(self) -> Path:
-        return self.data_dir / "app.db"
+        return Path("/tmp/app.db") if self.vercel else self.data_dir / "app.db"
 
     @field_validator("openai_api_key", "admin_token", mode="before")
     @classmethod

@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -51,6 +53,23 @@ def test_blank_or_oversized_messages_are_rejected(client):
 def test_rate_limit(client):
     codes = [client.post("/api/chat", json={"message": "How much?"}).status_code for _ in range(4)]
     assert codes == [200, 200, 200, 429]
+
+
+def test_rate_limit_is_per_visitor_behind_a_proxy(client):
+    for _ in range(3):
+        client.post("/api/chat", json={"message": "How much?"}, headers={"X-Forwarded-For": "1.1.1.1"})
+    blocked = client.post("/api/chat", json={"message": "How much?"}, headers={"X-Forwarded-For": "1.1.1.1"})
+    other = client.post("/api/chat", json={"message": "How much?"}, headers={"X-Forwarded-For": "2.2.2.2"})
+    assert blocked.status_code == 429 and other.status_code == 200
+
+
+def test_refresh_explains_when_live_refresh_is_unavailable(client):
+    response = client.post("/admin/refresh", headers={"X-Admin-Token": "secret"})
+    assert response.status_code == 501 and "scripts.ingest" in response.json()["detail"]
+
+
+def test_database_moves_to_tmp_on_vercel():
+    assert Settings(_env_file=None, vercel=True).db_path == Path("/tmp/app.db")
 
 
 def test_admin_requires_token(client):
