@@ -1,0 +1,20 @@
+# Secrets
+.env
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Runtime data (the extracted pages and the index in data/ ARE committed)
+data/raw/
+data/app.db
+data/index/*.tmp
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

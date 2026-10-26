@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#e85a4f">
+  <title>PlacidWay Assistant</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <main class="chat">
+    <header class="chat-header">
+      <img class="logo" src="/static/assets/placidway-logo.avif" alt="PlacidWay" width="140" height="70">
+      <div class="titles">
+        <h1>Virtual Assistant</h1>
+        <p>Answers from PlacidWay's pages on ITC Immunity Therapy Center, Tijuana</p>
+      </div>
+      <button type="button" id="new-chat" class="pill">New chat</button>
+    </header>
+
+    <section id="messages" class="messages" aria-live="polite">
+      <div class="message bot" dir="auto">
+        <div class="stack">
+          <div class="bubble">
+            <p>Hi! I'm PlacidWay's virtual assistant. I answer questions using PlacidWay's pages about
+            <strong>ITC Immunity Therapy Center</strong> in Tijuana, Mexico: treatment packages, prices,
+            services and videos, plus alternative medicine costs abroad.</p>
+            <p>Every answer links to the page it came from. <strong>What would you like to know?</strong></p>
+          </div>
+        </div>
+      </div>
+      <div id="suggestions" class="suggestions">
+        <button type="button" class="pill">How much does alternative cancer treatment cost at ITC?</button>
+        <button type="button" class="pill">What is included in the anal cancer treatment package?</button>
+        <button type="button" class="pill">Is alternative medicine cheaper in Mexico or Turkey?</button>
+        <button type="button" class="pill">¿Cuánto cuesta el programa para pacientes internados?</button>
+      </div>
+    </section>
+
+    <form id="composer" class="composer">
+      <textarea id="input" rows="1" maxlength="1000" placeholder="Type your message…"
+                aria-label="Your question" required></textarea>
+      <button type="submit" id="send" class="send-button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+             stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+        <span class="visually-hidden">Send</span>
+      </button>
+    </form>
+  </main>
+
+  <template id="lead-form-template">
+    <form class="lead-form">
+      <p class="lead-title">Leave your details and PlacidWay will contact you</p>
+      <input name="name" placeholder="Your name" maxlength="100" required>
+      <input name="email" type="email" placeholder="Email" maxlength="200" required>
+      <textarea name="message" rows="2" maxlength="2000" placeholder="Anything we should know? (optional)"></textarea>
+      <label class="consent"><input type="checkbox" name="consent" required>
+        I agree that PlacidWay may contact me about my request.</label>
+      <button type="submit" class="pill primary">Send my details</button>
+      <p class="lead-error" hidden></p>
+    </form>
+  </template>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

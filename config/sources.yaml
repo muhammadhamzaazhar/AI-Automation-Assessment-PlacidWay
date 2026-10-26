@@ -1,0 +1,28 @@
+sources:
+  - id: clinic-profile
+    page_type: clinic profile
+    url: https://www.placidway.com/profile/5/Alternative-Cancer-Treatment-by-ITC-Immunity-Therapy-Center
+
+  - id: package-adenocarcinoma
+    page_type: treatment package
+    url: https://www.placidway.com/package/7903/Alternative-Adenocarcinoma-Cancer-Treatment-Package-in-Tijuana-Mexico-by-ITC
+
+  - id: package-adrenal
+    page_type: treatment package
+    url: https://www.placidway.com/package/7902/Alternative-Adrenal-Cancer-Treatment-Package-in-Tijuana-Mexico-by-ITC
+
+  - id: package-anal
+    page_type: treatment package
+    url: https://www.placidway.com/package/7901/Alternative-Anal-Cancer-Treatment-Package-in-Tijuana-Mexico-by-ITC
+
+  - id: clinic-videos
+    page_type: clinic videos
+    url: https://www.placidway.com/profile-videos/5/Alternative-Cancer-Treatment-by-ITC-Immunity-Therapy-Center
+
+  - id: price-list
+    page_type: clinic price list
+    url: https://www.placidway.com/price-list/5/Alternative-Cancer-Treatment-by-ITC-Immunity-Therapy-Center
+
+  - id: price-comparison
+    page_type: price comparison across countries
+    url: https://www.placidway.com/search-medical-pricings/Alternative-Medicine/All/1
